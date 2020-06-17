@@ -3,7 +3,8 @@ from typing import List
 from simulator.board import Board, TileState, Tile
 
 _TILE_MAPPER = {
-    TileState.FREE: " "
+    TileState.FREE: " ",
+    TileState.OCCUPIED: "X"
 }
 
 
