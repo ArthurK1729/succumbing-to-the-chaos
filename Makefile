@@ -5,3 +5,6 @@ init:
 
 init-dev: init
 	pip install -r requirements-dev.txt
+
+clean:
+	find . -name "*.log" -type f -delete
