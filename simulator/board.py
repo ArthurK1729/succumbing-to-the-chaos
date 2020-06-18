@@ -7,7 +7,7 @@ from simulator import validators
 from simulator.actors import Actor, TileSummary, Environment, FieldOfVision, Action
 
 
-# random.seed = 42
+random.seed = 42
 
 
 class TileState(Enum):
@@ -98,12 +98,18 @@ class Board:
     def dimensions(self) -> Dimensions:
         return self._dimensions
 
+    @property
+    def actor_bundles(self) -> List[ActorBundle]:
+        return self._fetch_actor_bundles()
+
     def get_tiles_for_row(self, row_num: int) -> List[Tile]:
         validators.require_int_inclusive_range(row_num, 0, self._dimensions.rows, msg="Please follow board dimensions")
 
         coods = [Coordinate(x=col, y=row_num) for col in range(0, self._dimensions.columns)]
 
-        return self._fetch_tiles_for_coordinates(coods)
+        return self._get_tiles_for_coordinates(coods)
+
+
 
     def progress_time(self):
         actor_bundles = self._fetch_actor_bundles()
@@ -164,9 +170,9 @@ class Board:
         self._set_tile_for_coordinate(Tile(actor=actor_bundle.actor), new_cood)
 
     def _fetch_tile_for_coordinate(self, cood: Coordinate) -> Optional[Tile]:
-        return self._fetch_tiles_for_coordinates([cood])[0]
+        return self._get_tiles_for_coordinates([cood])[0]
 
-    def _fetch_tiles_for_coordinates(self, coods: List[Coordinate]) -> List[Optional[Tile]]:
+    def _get_tiles_for_coordinates(self, coods: List[Coordinate]) -> List[Optional[Tile]]:
         return [(self._board[cood] if (cood in self._board) else None) for cood in coods]
 
     def _fetch_actor_bundles(self) -> List[ActorBundle]:
