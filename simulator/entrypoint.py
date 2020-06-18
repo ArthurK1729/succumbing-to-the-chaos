@@ -1,3 +1,5 @@
+import time
+
 from simulator.actors import RabbitActor
 from simulator.board import Board, ActorBundle, Coordinate
 from simulator.visualiser import Visualiser
@@ -22,7 +24,10 @@ def main():
 
     visualiser = Visualiser()
 
-    visualiser.print_snapshot(board)
+    for _ in range(0, 1000):
+        visualiser.print_snapshot(board)
+        time.sleep(0.01)
+        board.progress_time()
 
 
 if __name__ == "__main__":

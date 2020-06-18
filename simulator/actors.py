@@ -7,7 +7,7 @@ from typing import Optional
 
 @dataclass(frozen=True)
 class TileSummary:
-    is_wall: bool
+    is_passage_open: bool
 
 
 @dataclass(frozen=True)
@@ -28,6 +28,7 @@ class Action(Enum):
     MOVE_DOWN = auto()
     MOVE_LEFT = auto()
     MOVE_RIGHT = auto()
+    DO_NOTHING = auto()
 
 
 class Actor(ABC):
@@ -37,9 +38,29 @@ class Actor(ABC):
 
 
 class RabbitActor(Actor):
-
     def think(self, env: Environment) -> Action:
         directions = env.field_of_vision
-        open_directions = [direction for direction in directions if direction is not None]
+        possible_actions = []
 
-        chosen_direction = random.choice(open_directions)
+        if up := directions.up:
+            if up.is_passage_open:
+                possible_actions.append(Action.MOVE_UP)
+
+        if down := directions.down:
+            if down.is_passage_open:
+                possible_actions.append(Action.MOVE_DOWN)
+
+        if left := directions.left:
+            if left.is_passage_open:
+                possible_actions.append(Action.MOVE_LEFT)
+
+        if right := directions.right:
+            if right.is_passage_open:
+                possible_actions.append(Action.MOVE_RIGHT)
+
+        if possible_actions:
+            chosen_action = random.choice(possible_actions)
+        else:
+            chosen_action = Action.DO_NOTHING
+
+        return chosen_action
