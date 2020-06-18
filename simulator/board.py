@@ -6,7 +6,6 @@ from typing import List, Optional
 from simulator import validators
 from simulator.actors import Actor, TileSummary, Environment, FieldOfVision, Action
 
-
 random.seed = 42
 
 
@@ -108,8 +107,6 @@ class Board:
         coods = [Coordinate(x=col, y=row_num) for col in range(0, self._dimensions.columns)]
 
         return self._get_tiles_for_coordinates(coods)
-
-
 
     def progress_time(self):
         actor_bundles = self._fetch_actor_bundles()

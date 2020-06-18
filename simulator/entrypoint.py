@@ -4,7 +4,7 @@ from pathlib import Path
 from simulator.actors import RabbitActor
 from simulator.board import Board, ActorBundle, Coordinate
 from simulator.statistics import StatisticsAggregator, FileSink
-from simulator.visualiser import Visualiser
+from simulator.visualiser import ConsoleVisualiser
 
 
 def main():
@@ -24,7 +24,7 @@ def main():
         actor_bundles=actor_bundles
     )
 
-    visualiser = Visualiser()
+    visualiser = ConsoleVisualiser()
 
     statistics_aggregator = StatisticsAggregator(FileSink(Path("statistics.log")))
 

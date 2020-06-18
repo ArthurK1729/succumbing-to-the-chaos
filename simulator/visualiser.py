@@ -1,5 +1,6 @@
-from typing import List
 import os
+from abc import ABC, abstractmethod
+from typing import List
 
 from simulator.actors import RabbitActor
 from simulator.board import Board, Tile
@@ -9,7 +10,13 @@ _TILE_MAPPER = {
 }
 
 
-class Visualiser:
+class Visualiser(ABC):
+    @abstractmethod
+    def print_snapshot(self, board: Board):
+        raise NotImplementedError
+
+
+class ConsoleVisualiser(Visualiser):
     def print_snapshot(self, board: Board):
         dimensions = board.dimensions
 
