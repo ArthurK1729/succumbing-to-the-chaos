@@ -28,12 +28,13 @@ def main():
 
     statistics_aggregator = StatisticsAggregator(FileSink(Path("statistics.log")))
 
-    for _ in range(0, 1000):
+    for tick in range(0, 1000):
         visualiser.print_snapshot(board)
         time.sleep(0.0001)
         board.progress_time()
 
-        statistics_aggregator.compute_actor_centroid(board)
+        statistics_aggregator.compute_actor_centroid(board, tick)
+        statistics_aggregator.compute_actor_count(board, tick)
 
 
 if __name__ == "__main__":
