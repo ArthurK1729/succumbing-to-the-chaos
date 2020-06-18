@@ -3,6 +3,7 @@ from abc import ABC, abstractmethod
 from dataclasses import dataclass
 from pathlib import Path
 
+from simulator.actors import RabbitActor
 from simulator.board import Board
 
 
@@ -62,7 +63,7 @@ class FileSink(StatisticsSink):
 
 
 @dataclass(frozen=True)
-class CentroidStatistic:
+class ActorCentroidStatistic:
     x: float
     y: float
     tick: int
@@ -70,6 +71,16 @@ class CentroidStatistic:
     @property
     def json(self) -> str:
         return json.dumps({"statistic": "centroid", "tick": self.tick, "x": self.x, "y": self.y})
+
+
+@dataclass(frozen=True)
+class RabbitCountStatistic:
+    count: int
+    tick: int
+
+    @property
+    def json(self) -> str:
+        return json.dumps({"statistic": "rabbit_count", "tick": self.tick, "count": self.count})
 
 
 @dataclass(frozen=True)
@@ -89,7 +100,7 @@ class StatisticsAggregator:
     def compute_actor_centroid(self, board: Board, tick: int):
         actor_bundles = board.actor_bundles
 
-        statistic = CentroidStatistic(
+        statistic = ActorCentroidStatistic(
             x=(sum([actor_bundle.coordinate.x for actor_bundle in actor_bundles]) / len(actor_bundles)),
             y=(sum([actor_bundle.coordinate.y for actor_bundle in actor_bundles]) / len(actor_bundles)),
             tick=tick
@@ -102,6 +113,16 @@ class StatisticsAggregator:
 
         statistic = ActorCountStatistic(
             count=count,
+            tick=tick
+        )
+
+        self._sink.buffer(data=statistic.json)
+
+    def compute_rabbit_count(self, board: Board, tick: int):
+        rabbits = [actor_bundle for actor_bundle in board.actor_bundles if isinstance(actor_bundle.actor, RabbitActor)]
+
+        statistic = RabbitCountStatistic(
+            count=len(rabbits),
             tick=tick
         )
 

@@ -35,6 +35,7 @@ def main():
 
         statistics_aggregator.compute_actor_centroid(board, tick)
         statistics_aggregator.compute_actor_count(board, tick)
+        statistics_aggregator.compute_rabbit_count(board, tick)
 
 
 if __name__ == "__main__":
